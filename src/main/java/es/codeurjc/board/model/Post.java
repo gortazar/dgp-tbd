@@ -1,12 +1,15 @@
 package es.codeurjc.board.model;
 
 import java.sql.Blob;
+import java.util.List;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -21,6 +24,9 @@ public class Post {
 	private String title;
 	private String text;
 	private String image;
+
+	@OneToMany
+	private List<Comment> comments;
 
 	@Lob
 	@JsonIgnore
@@ -82,5 +88,9 @@ public class Post {
 
 	public void setImageFile(Blob image) {
 		this.imageFile = image;
+	}
+
+	public void addComment(Comment savedComment) {
+		this.comments.add(savedComment);
 	}
 }
