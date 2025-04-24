@@ -11,13 +11,13 @@ import es.codeurjc.board.model.Post;
 public class SampleDataService {
 
 	@Autowired
-	private PostService posts; 
+	private PostServiceInterface posts; 
 	
 	@PostConstruct
 	public void init() {
 
-		posts.save(new Post("Pepe", "Vendo moto", "Barata, barata"));
-		posts.save(new Post("Juan", "Compro coche", "Pago bien"));
+		posts.save(new PostDto("Pepe", "Vendo moto", "Barata, barata"));
+		posts.save(new PostDto("Juan", "Compro coche", "Pago bien"));
 	}
 	
 }

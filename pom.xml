@@ -5,13 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>es.codeurjc</groupId>
-	<artifactId>bd_ejem22</artifactId>
+	<artifactId>bd_ejem22-branch-by-abstraction</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.2.1</version>
+		<version>3.4.1</version>
 	</parent>
 
 	<properties>
@@ -37,33 +37,58 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 		</dependency>
+
+
+		<dependency>
+			<groupId>org.togglz</groupId>
+			<artifactId>togglz-spring-boot-starter</artifactId>
+			<version>3.1.2</version>
+		</dependency>
+		<!-- Togglz Admin Console -->
+		<dependency>
+			<groupId>org.togglz</groupId>
+			<artifactId>togglz-console</artifactId>
+			<version>3.1.2</version>
+		</dependency>
+		
+		<!-- Model mapper-->
+		<dependency>
+  			<groupId>org.modelmapper</groupId>
+  			<artifactId>modelmapper</artifactId>
+  			<version>3.0.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb</artifactId>
+		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
-<plugin>
-    <groupId>io.github.git-commit-id</groupId>
-    <artifactId>git-commit-id-maven-plugin</artifactId>
-    <version>9.0.1</version>
-    <executions>
-        <execution>
-            <id>get-the-git-infos</id>
-            <goals>
-                <goal>revision</goal>
-            </goals>
-            <phase>initialize</phase>
-        </execution>
-    </executions>
-    <configuration>
-        <generateGitPropertiesFile>true</generateGitPropertiesFile>
-        <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
-        <commitIdGenerationMode>full</commitIdGenerationMode>
-    </configuration>
-</plugin>
+			<plugin>
+				<groupId>io.github.git-commit-id</groupId>
+				<artifactId>git-commit-id-maven-plugin</artifactId>
+				<version>9.0.1</version>
+				<executions>
+					<execution>
+						<id>get-the-git-infos</id>
+						<goals>
+							<goal>revision</goal>
+						</goals>
+						<phase>initialize</phase>
+					</execution>
+				</executions>
+				<configuration>
+					<generateGitPropertiesFile>true</generateGitPropertiesFile>
+					<generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+					<commitIdGenerationMode>full</commitIdGenerationMode>
+				</configuration>
+			</plugin>
 
 		</plugins>
 	</build>

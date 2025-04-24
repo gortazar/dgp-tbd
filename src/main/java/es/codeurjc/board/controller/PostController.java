@@ -25,28 +25,30 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import es.codeurjc.board.model.Post;
-import es.codeurjc.board.service.PostService;
+import es.codeurjc.board.service.PostDto;
+import es.codeurjc.board.service.PostServiceSQL;
+import es.codeurjc.board.service.PostServiceInterface;
 
 @RestController
 @RequestMapping("/posts")
 public class PostController {
 
 	@Autowired
-	private PostService posts;
+	private PostServiceInterface posts;
 
 	@GetMapping("/")
-	public List<Post> getPosts() {
+	public List<PostDto> getPosts() {
 		return posts.findAll();
 	}
 
 	@GetMapping("/{id}")
-	public Post getPost(@PathVariable long id) {
+	public PostDto getPost(@PathVariable long id) {
 
 		return posts.findById(id).orElseThrow();
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<Post> createPost(@RequestBody Post post) {
+	public ResponseEntity<PostDto> createPost(@RequestBody PostDto post) {
 
 		posts.save(post);
 
@@ -56,7 +58,7 @@ public class PostController {
 	}
 
 	@PutMapping("/{id}")
-	public Post replacePost(@RequestBody Post newPost, @PathVariable long id) {
+	public PostDto replacePost(@RequestBody PostDto newPost, @PathVariable long id) {
 
 		newPost.setId(id);
 
@@ -66,9 +68,9 @@ public class PostController {
 	}
 
 	@DeleteMapping("/{id}")
-	public Post deletePost(@PathVariable long id) {
+	public PostDto deletePost(@PathVariable long id) {
 
-		Post post = posts.findById(id).orElseThrow();
+		PostDto post = posts.findById(id).orElseThrow();
 
 		posts.deleteById(id);
 
@@ -79,44 +81,44 @@ public class PostController {
 	public ResponseEntity<Object> uploadImage(@PathVariable long id, @RequestParam MultipartFile imageFile)
 			throws IOException {
 
-		Post post = posts.findById(id).orElseThrow();
+		PostDto post = posts.findById(id).orElseThrow();
 
 		URI location = fromCurrentRequest().build().toUri();
 
 		post.setImage(location.toString());
-		post.setImageFile(BlobProxy.generateProxy(imageFile.getInputStream(), imageFile.getSize()));
+		post.setImageFile(imageFile.getInputStream().readAllBytes());
 		posts.save(post);
 
 		return ResponseEntity.created(location).build();
 	}
 
-	@GetMapping("/{id}/image")
-	public ResponseEntity<Object> downloadImage(@PathVariable long id) throws SQLException {
-
-		Post post = posts.findById(id).orElseThrow();
-
-		if (post.getImageFile() != null) {
-
-			Resource file = new InputStreamResource(post.getImageFile().getBinaryStream());
-
-			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
-					.contentLength(post.getImageFile().length()).body(file);
-
-		} else {
-			return ResponseEntity.notFound().build();
-		}
-	}
-
-	@DeleteMapping("/{id}/image")
-	public ResponseEntity<Object> deleteImage(@PathVariable long id) throws IOException {
-
-		Post post = posts.findById(id).orElseThrow();
-
-		post.setImageFile(null);
-		post.setImage(null);
-		
-		posts.save(post);
-
-		return ResponseEntity.noContent().build();
-	}
+//	@GetMapping("/{id}/image")
+//	public ResponseEntity<Object> downloadImage(@PathVariable long id) throws SQLException {
+//
+//		PostDto post = posts.findById(id).orElseThrow();
+//
+//		if (post.getImageFile() != null) {
+//
+//			Resource file = new InputStreamResource(post.getImageFile());
+//
+//			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, "image/jpeg")
+//					.contentLength(post.getImageFile().length()).body(file);
+//
+//		} else {
+//			return ResponseEntity.notFound().build();
+//		}
+//	}
+//
+//	@DeleteMapping("/{id}/image")
+//	public ResponseEntity<Object> deleteImage(@PathVariable long id) throws IOException {
+//
+//		Post post = posts.findById(id).orElseThrow();
+//
+//		post.setImageFile(null);
+//		post.setImage(null);
+//		
+//		posts.save(post);
+//
+//		return ResponseEntity.noContent().build();
+//	}
 }
